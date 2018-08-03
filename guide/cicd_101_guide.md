@@ -1,23 +1,43 @@
-## CI/CD Introduction Workshop
+# Intro to CI/CD Workshop
 
-This document will walk you through implementing a simple CI/CD pipeline into a code base using [CircleCI](https://circleci.com/)
-I recently gave a talk at DockerCon and it was focused on showing the audience how to easily implement a CI/CD pipeline into their codebase with very little effort.  In this post I'll share and walk through the demo code and CircleCI config that I used in my talk which will demonstrate how to implement CI/CD pipelines into your code base.  This post will explain:
+This document will walk through implementing a simple CI/CD pipeline into a codebase using [CircleCI](https://circleci.com/)
+The following will be demonstrated:
 
-- A simple unittest for a python flask application
+- Integrating CircleCI with a Github project
+- A unittest for a python flask application
 - Implementing a CI/CD pipeline in the codebase using a CircleCI config file in the project
-- Build a docker image
-- Push the docker image to [Docker Hub](https://hub.docker.com)
-- Kick-off a deployment script which will run the application in docker container on a [Digital Ocean](https://www.digitalocean.com) server
+- Build a Docker image
+- Deploy the Docker image to [Docker Hub](https://hub.docker.com)
 
-# Prerequisites
+## Prerequisites
 
-Before we get started you'll need to have these things:
- - A [Docker Hub account](https://hub.docker.com)
+Before you get started you'll need to have these things:
+
+- [Github Account](https://github.com/join)
+- [CircleCI](https://circleci.com/signup/) account
+- Docker Hub account](https://hub.docker.com)
+- Fork then clone the [cicd-101-workshop repo](https://github.com/ariv3ra/cicd-101-workshop) locally
+
+<!--  
  - Set [Project Environment Variables](https://circleci.com/docs/2.0/env-vars/#setting-an-environment-variable-in-a-project) which specify your Docker Hub **Username** and **Password**in the CircleCI dashboard
  - SSH Access to a cloud server. You can [add a SSH key to your account](https://circleci.com/docs/2.0/add-ssh-key/) via the CircleCI portal. For this post I'll be using a [Digital Ocean](https://www.digitalocean.com) server but you can use whatever server/cloud provider you desire
  - Create a deployment script on the host server that will be used to deploy this application [here is an example deployment script deploy_app.sh](https://raw.githubusercontent.com/ariv3ra/python-circleci-docker/master/deploy_app.sh)
+ -->
 
  After you have all the pre-requisites complete you're ready to proceed to the next section.
+
+## CircleCI: Add Project
+
+In order for the CircleCI platform to integrate with projects it must have access to your codebase. In this section demonstrate how to give CircleCI access to a project on Github via the CircleCi dashboard.
+
+- Login to the [dashboard](http://circleci.com/vcs-authorize/)
+- Click the **Add Project** icon on the left menu
+- Find the `cicd-101-workshop` project in the list
+- Click the corresponding  `Set Up Project` button on the right 
+
+![Add Project](./images/cci_add_project.png)
+
+<!-- Left off here -->
 
 # The App
 
