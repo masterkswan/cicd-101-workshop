@@ -33,11 +33,13 @@ In order for the CircleCI platform to integrate with projects it must have acces
 - Login to the [dashboard](http://circleci.com/vcs-authorize/)
 - Click the **Add Project** icon on the left menu
 - Find the `cicd-101-workshop` project in the list
-- Click the corresponding  `Set Up Project` button on the right 
+- Click the corresponding **Set Up Project** button on the right 
 
 ![Add Project](./images/cci_add_project.png)
 
-<!-- Left off here -->
+-
+
+<!-- Left off here --> 
 
 # The App
 
