@@ -37,7 +37,59 @@ In order for the CircleCI platform to integrate with projects it must have acces
 
 ![Add Project](./images/cci_add_project.png)
 
--
+- On the `Set Up Project Section` click the **Other** button
+
+![Select Language Button](./images/cci_select_lang.png)
+
+- Scroll down then click the **Start Building** button
+
+![Start Building Button](./images/cci_start_building.png)
+
+## Set Project Level Environment Variables
+
+The build **will** fail because the CircleCI configuration uses environment variables `$DOCKER_LOGIN` and `$DOCKER_PWD` that are not configured. The following demonstrates how to set these variables.
+
+- Click the project settings **cog** icon on the right
+
+![Project Settings](images/cci_proj_settings.png)
+
+- From the `Project Overview` page click **Environment Variables** on the left
+
+![Env Variables](images/cci_select_env_vars.png)
+
+- Click **Add Variable** button
+
+![Add Variables](images/cci_add_vars.png)
+
+- Enter `DOCKER_LOGIN` in the **Name** field
+- Enter your Docker Hub username in the **Value** field (Don't use your email address)
+- Click **Add Variable** button
+
+![env login](images/cci_env_login.png)
+
+- Click the **Add Variable** buton again
+- Enter `DOCKER_PWD` in the **Name** field
+- Enter your Docker Hub Password in the **Value** field
+- Click **Add Variable** button
+
+![env pwd](images/cci_env_pwd.png)  
+
+The Environment Variables are defined and the build should now complete when rebuilt.
+
+## Rebuild the Project
+
+The project is properly configured and will build Green on the next run. To manually rebuild the failed project:
+
+- Click the **Rebuild** button on the top right
+
+![rebuild button](images/cci_rebuild.png)
+
+This run should produce a Green build!
+
+![first green build](images/cci_1st_success.png)
+
+
+
 
 <!-- Left off here --> 
 
