@@ -1,21 +1,21 @@
 # Intro to CI/CD Workshop
 
-This document will walk through implementing a simple CI/CD pipeline into a codebase using [CircleCI](https://circleci.com/)
+This document will walk through implementing a simple CI/CD pipeline into a codebase using [CircleCI](https://circleci.com/).
 The following will be demonstrated:
 
-- Integrating CircleCI with a Github project
-- A unittest for a python flask application
+- Integrating CircleCI with a GitHub project
+- A unittest for a Python Flask application
 - Implementing a CI/CD pipeline in the codebase using a CircleCI config file in the project
-- Build a Docker image
+- Building a Docker image
 - Deploy the Docker image to [Docker Hub](https://hub.docker.com)
 
 ## Prerequisites
 
 Before you get started you'll need to have these things:
 
-- [Github Account](https://github.com/join)
+- [GitHub Account](https://github.com/join)
 - [CircleCI](https://circleci.com/signup/) account
-- Docker Hub account](https://hub.docker.com)
+- [Docker Hub account](https://hub.docker.com)
 - Fork then clone the [cicd-101-workshop repo](https://github.com/ariv3ra/cicd-101-workshop) locally
 
 <!--  
@@ -28,10 +28,11 @@ Before you get started you'll need to have these things:
 
 ## CircleCI: Add Project
 
-In order for the CircleCI platform to integrate with projects it must have access to your codebase. In this section demonstrate how to give CircleCI access to a project on Github via the CircleCi dashboard.
+In order for the CircleCI platform to integrate with projects it must have access to your codebase. In this section demonstrate how to give CircleCI access to a project on GitHub via the CircleCI Dashboard.
 
-- Login to the [dashboard](http://circleci.com/vcs-authorize/)
+- Login to the [Dashboard](http://circleci.com/vcs-authorize/)
 - Click the **Add Project** icon on the left menu
+- Choose the appropriate GitHub org from the dropdown in the top left
 - Find the `cicd-101-workshop` project in the list
 - Click the corresponding **Set Up Project** button on the right 
 
