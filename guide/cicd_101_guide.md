@@ -18,85 +18,11 @@ Before you get started you'll need to have these things:
 - [Docker Hub account](https://hub.docker.com)
 - Fork then clone the [cicd-101-workshop repo](https://github.com/ariv3ra/cicd-101-workshop) locally
 
-<!--  
- - Set [Project Environment Variables](https://circleci.com/docs/2.0/env-vars/#setting-an-environment-variable-in-a-project) which specify your Docker Hub **Username** and **Password**in the CircleCI dashboard
- - SSH Access to a cloud server. You can [add a SSH key to your account](https://circleci.com/docs/2.0/add-ssh-key/) via the CircleCI portal. For this post I'll be using a [Digital Ocean](https://www.digitalocean.com) server but you can use whatever server/cloud provider you desire
- - Create a deployment script on the host server that will be used to deploy this application [here is an example deployment script deploy_app.sh](https://raw.githubusercontent.com/ariv3ra/python-circleci-docker/master/deploy_app.sh)
- -->
-
  After you have all the pre-requisites complete you're ready to proceed to the next section.
 
-## CircleCI: Add Project
+## The App
 
-In order for the CircleCI platform to integrate with projects it must have access to your codebase. In this section demonstrate how to give CircleCI access to a project on GitHub via the CircleCI Dashboard.
-
-- Login to the [Dashboard](http://circleci.com/vcs-authorize/)
-- Click the **Add Project** icon on the left menu
-- Choose the appropriate GitHub org from the dropdown in the top left
-- Find the `cicd-101-workshop` project in the list
-- Click the corresponding **Set Up Project** button on the right 
-
-![Add Project](./images/cci_add_project.png)
-
-- On the `Set Up Project Section` click the **Other** button
-
-![Select Language Button](./images/cci_select_lang.png)
-
-- Scroll down then click the **Start Building** button
-
-![Start Building Button](./images/cci_start_building.png)
-
-## Set Project Level Environment Variables
-
-The build **will** fail because the CircleCI configuration uses environment variables `$DOCKER_LOGIN` and `$DOCKER_PWD` that are not configured. The following demonstrates how to set these variables.
-
-- Click the project settings **cog** icon on the right
-
-![Project Settings](images/cci_proj_settings.png)
-
-- From the `Project Overview` page click **Environment Variables** on the left
-
-![Env Variables](images/cci_select_env_vars.png)
-
-- Click **Add Variable** button
-
-![Add Variables](images/cci_add_vars.png)
-
-- Enter `DOCKER_LOGIN` in the **Name** field
-- Enter your Docker Hub username in the **Value** field (Don't use your email address)
-- Click **Add Variable** button
-
-![env login](images/cci_env_login.png)
-
-- Click the **Add Variable** buton again
-- Enter `DOCKER_PWD` in the **Name** field
-- Enter your Docker Hub Password in the **Value** field
-- Click **Add Variable** button
-
-![env pwd](images/cci_env_pwd.png)  
-
-The Environment Variables are defined and the build should now complete when rebuilt.
-
-## Rebuild the Project
-
-The project is properly configured and will build Green on the next run. To manually rebuild the failed project:
-
-- Click the **Rebuild** button on the top right
-
-![rebuild button](images/cci_rebuild.png)
-
-This run should produce a Green build!
-
-![first green build](images/cci_1st_success.png)
-
-
-
-
-<!-- Left off here --> 
-
-# The App
-
-For this post I'll be using a simple python [Flask](http://flask.pocoo.org/) and you can find the complete [source code for this project here](https://github.com/ariv3ra/python-circleci-docker) and you can `git clone` it locally. The app is a simple webserver that renders html when a request is made to it. The flask application lives in the `hello_world.py` file:
+This repo contains a simple python [Flask](http://flask.pocoo.org/) and you can find the complete [source code for this project here](https://github.com/ariv3ra/cicd-101-workshop) and you can `git clone` it locally. The app is a simple webserver that renders html when a request is made to it. The flask application lives in the `hello_world.py` file:
 
 ```
 from flask import Flask
@@ -107,9 +33,9 @@ def wrap_html(message):
     html = """
         <html>
         <body>
-            <div style='font-size:120px;'>
+            <div style='font-size:80px;'>
             <center>
-                <image height="200" width="800" src="https://infosiftr.com/wp-content/uploads/2018/01/unnamed-2.png">
+                <image height="340" width="1200" src="https://user-images.githubusercontent.com/194400/41597205-a57442ea-73c4-11e8-9591-61f5c83c7e66.png">
                 <br>
                 {0}<br>
             </center>
@@ -120,7 +46,7 @@ def wrap_html(message):
 
 @app.route('/')
 def hello_world():
-    message = 'Hello DockerCon 2018!'
+    message = 'Welcome to CI/CD 101 using CircleCI'
     html = wrap_html(message)
     return html
 
@@ -130,9 +56,9 @@ if __name__ == '__main__':
 
 The key take away in this code the `message` variable within the `hello_world()` function.  This variable specifies a string value and the value of this variable will be tested for a match in a unittest.
 
-# Testing Code
+## Testing Code
 
-All code must be tested to ensure that quality stable code is being released to the public.  Python comes with a testing framework named [unittest](https://docs.python.org/2/library/unittest.html) and I'll be using that for this post.  We now have a complete flask application and it needs a companion unittest that will test the application and ensure it's functioning as designed. The unittest file `test_hello_world.py` is the unittest for our hello_world.py app and I'll walk your through the code.
+All code must be tested to ensure that quality stable code is being released to the public.  Python comes with a testing framework named [unittest](https://docs.python.org/2/library/unittest.html) which is used in this example.  The flask application has a companion unittest that will test the application and ensure it's functioning as designed. The file `test_hello_world.py` is the unittest for our hello_world.py app below is a quick explanation the code.
 
 ```
 import hello_world
@@ -150,7 +76,7 @@ class TestHelloWorld(unittest.TestCase):
     
     def test_message(self):
         response = self.app.get('/')
-        message = hello_world.wrap_html('Hello DockerCon 2018!')
+        message = hello_world.wrap_html('Welcome to CI/CD 101 using CircleCI')
         self.assertEqual(response.data, message)
 
 if __name__ == '__main__':
@@ -187,34 +113,34 @@ def test_status_code(self):
 ```
 def test_message(self):
     response = self.app.get('/')
-    message = hello_world.wrap_html('Hello DockerCon 2018!')
+    message = hello_world.wrap_html('Welcome to CI/CD 101 using CircleCI')
     self.assertEqual(response.data, message)
 ```
 
 `test_message()` is another method that specifies a different test case.  This test case is designed to check the value of the `message` variable that is defined in the `hello_world()` method from the hello_world.py code. Like the previous test a **get** call is made to the app and the results are captured in a `response` variable. The following line :
 
 ```
-message = hello_world.wrap_html('Hello DockerCon 2018!')
+message = hello_world.wrap_html('Welcome to CI/CD 101 using CircleCI')
 ```
 
-The `message` variable is assigned the resulting html from the `hello_world.wrap_html()` helper method which is defined in the hello_world app.  The string `Hello DockerCon 2018` is supplied to the `wrap_html()` method which is then injected & returned in html. The `test_message()` will verify that the message variable in the app will match the expected string in this test case. If the strings don't match then the test will fail.
+The `message` variable is assigned the resulting html from the `hello_world.wrap_html()` helper method which is defined in the hello_world app.  The string `Welcome to CI/CD 101 using CircleCI` is supplied to the `wrap_html()` method which is then injected & returned in html. The `test_message()` will verify that the message variable in the app will match the expected string in this test case. If the strings don't match then the test will fail.
 
-# CI/CD Pipelines
+## CI/CD Pipeline using CircleCI
 
-Now that we're clear on the application and it's unit tests it time to implement a Continuos Integration / Continuous Deployment pipeline into the codebase. Implementing a CI/CD pipeline using CircleCI is very simple. Before continuing make sure you do the following:
+Now that the application and unit tests have been explained, it's time to implement a CI/CD pipeline into the codebase. Implementing a CI/CD pipeline using CircleCI is very simple. 
 
-- [Create a CircleCI Account](https://circleci.com/signup/)
-- [Setup your build in CircleCI](https://circleci.com/docs/2.0/#setting-up-your-build-on-circleci)
+CircleCI integration is completed in basically two steps. 
 
-## Implement a CI/CD pipeline
+1. Set up project access in CircleCI dashboard
+2. Define your CI/CD Builds a `config.yml` file
 
-Once your project is setup in the CircleCI platform any commits pushed upstream will be detect and CircleCI will execute the job defined in your `config.yml` file.
+Once project's are setup in the CircleCI platform any commits pushed upstream tot he codebase will be detected and CircleCI will execute the job defined in your `config.yml` file which is discussed in the next section.
 
-You will need to create a new directory in the repo's root and a yaml file within this new directory. The new assets must follow these naming schema - directory: `.circleci/` file: `config.yml` in your project's git repository. This directory and file basically define your CI/CD pipeline adn configuration for the CircleCI platform.
+Before continuing ensure the [Prerequisites](#Prerequisites) section is completed. 
 
-## config.yml File
+# config.yml File
 
-The config.yml is where all of the CI/CD magic happens. Below is an example of the file used in the example file and I'll briefly explain what's going on within the syntax:
+The config.yml is where all of the CI/CD magic happens. Below is an example of the config.yml used in this workshop with a brief explanation of the syntax:
 
 ```
 version: 2
@@ -302,9 +228,7 @@ In this run block the command executes tests on our application and if these tes
     docker_layer_caching: true
 ```
 
-This run block specifies the [setup_remote_docker:](https://circleci.com/docs/2.0/glossary/#remote-docker) key which is a feature that enables building, running and pushing images to Docker registries from within a Docker executor job. When docker_layer_caching is set to true, CircleCI will try to reuse Docker Images (layers) built during a previous job or workflow. That is, every layer you built in a previous job will be accessible in the remote environment. However, in some cases your job may run in a clean environment, even if the configuration specifies docker_layer_caching: true.
-
-Since we're building a Docker image for our app and pushing that image to Docker Hub the `setup_remote_docker:` is required.
+A requirement of this pipeline is to build a Docker image based on the app and pushing that image to Docker Hub. This run block specifies the [setup_remote_docker:](https://circleci.com/docs/2.0/glossary/#remote-docker) key which is a feature that enables building, running and pushing images to Docker registries from within a Docker executor job. When docker_layer_caching is set to true, CircleCI will try to reuse Docker Images (layers) built during a previous job or workflow. That is, every layer you built in a previous job will be accessible in the remote environment. However, in some cases your job may run in a clean environment, even if the configuration specifies `docker_layer_caching: true`.
 
 ```
 - run:
@@ -320,42 +244,108 @@ Since we're building a Docker image for our app and pushing that image to Docker
 The **Build and push Docker image** run block specifies the commands that package the application into a single binary using pyinstaller then continues on to the Docker image building process.
 
 ```
-docker build -t ariv3ra/$IMAGE_NAME:$TAG .
+docker build -t $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
 echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-docker push ariv3ra/$IMAGE_NAME:$TAG
+docker push $DOCKER_LOGIN/$IMAGE_NAME:$TAG
 ```
+
+The `echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin` command uses the $DOCKER_LOGIN and $DOCKER_PWD env variables set in the CircleCI dashboard as credentials to login & push this image to Docker Hub.
 
 These commands build the docker image based on the `Dockerfile` included in the repo. [Dockerfile](https://docs.docker.com/engine/reference/builder/) is the instruction on how to build the Docker image.
 
 ```
 FROM python:2.7.14
 
-RUN mkdir /opt/hello_word/
-WORKDIR /opt/hello_word/
+RUN mkdir /opt/hello_world/
+WORKDIR /opt/hello_world/
 
 COPY requirements.txt .
-COPY dist/hello_world /opt/hello_word/
+COPY dist/hello_world /opt/hello_world/
 
 EXPOSE 80
 
 CMD [ "./hello_world" ]
 ```
 
-The `echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin` command uses the $DOCKER_LOGIN and $DOCKER_PWD env variables set in the CircleCI dashboard as credentials to login & push this image to Docker Hub.
+## Hands On with CircleCI
 
-```
-- run:
-    name: Deploy app to Digital Ocean Server via Docker
-    command: |
-      ssh -o StrictHostKeyChecking=no root@hello.dpunks.org "/bin/bash ./deploy_app.sh ariv3ra/$IMAGE_NAME:$TAG"
-```            
+The application, unit tests and config.yml have been explained in detail and provide an initial understanding of how code bases, CI/CD concepts and using CircleCI to facilitate pipelines. The rest of this document will demonstrate how to integrate CircleCI into a user's CircleCI profile and executing CI/CD builds. The [cicd-101-workshop repo](https://github.com/ariv3ra/cicd-101-workshop) will be used in this example.
 
-The final run bock deploys our new code to a live server running on the Digital Ocean platform. **Make sure** that you've created a deploy script on the remote server.  The ssh command access the remote server and executes the `deploy_app.sh` script on the the server and specifies: **ariv3ra/$IMAGE_NAME:$TAG** which specifies the image to pull & deploy from Docker Hub.
+### Add Project to CircleCI
 
-After the job successfully completes, the new application should be running on the target server you specified in you config.yml.
+In order for the CircleCI platform to integrate with projects it must have access to your codebase. In this section demonstrate how to give CircleCI access to a project on Github via the CircleCi dashboard.
 
-# Summary
+- Login to the [dashboard](http://circleci.com/vcs-authorize/)
+- Click the **Add Project** icon on the left menu
+- Choose the appropriate GitHub org from the dropdown in the top left
+- Find the `cicd-101-workshop` project in the list
+- Click the corresponding **Set Up Project** button on the right 
 
-In review this post should guide you through implementing a CI/CD pipeline into your code.  Though this example is built using python technologies the general build, test and deployment concepts can easily be implemented in whatever language or framework you desire. The examples in this post are also simple but you can expand on them and tailor them to your pipelines. CircleCI has great [documentation](https://circleci.com/docs/2.0/) so don't hesitate to research our docs site and if you really get stuck you can also reach out to the CircleCI community via the [https://discuss.circleci.com/](https://discuss.circleci.com/) community/forum site.
+![Add Project](./images/cci_add_project.png)
+
+- On the `Set Up Project Section` click the **Other** button
+
+![Select Language Button](./images/cci_select_lang.png)
+
+- Scroll down then click the **Start Building** button
+
+![Start Building Button](./images/cci_start_building.png)
+
+### Set Project Level Environment Variables
+
+The build **will** fail because the CircleCI configuration uses environment variables `$DOCKER_LOGIN` and `$DOCKER_PWD` that are not configured. The following demonstrates how to set these variables.
+
+- Click the project settings **cog** icon on the right
+
+![Project Settings](images/cci_proj_settings.png)
+
+- From the `Project Overview` page click **Environment Variables** on the left
+
+![Env Variables](images/cci_select_env_vars.png)
+
+- Click **Add Variable** button
+
+![Add Variables](images/cci_add_vars.png)
+
+- Enter `DOCKER_LOGIN` in the **Name** field
+- Enter your Docker Hub username in the **Value** field (Don't use your email address)
+- Click **Add Variable** button
+
+![env login](images/cci_env_login.png)
+
+- Click the **Add Variable** button again
+- Enter `DOCKER_PWD` in the **Name** field
+- Enter your Docker Hub Password in the **Value** field
+- Click **Add Variable** button
+
+![env pwd](images/cci_env_pwd.png)  
+
+The Environment Variables are defined and the build should now complete when rebuilt.
+
+### Rebuild the Project
+
+The project is properly configured and will build Green on the next run. To manually rebuild the failed project:
+
+- Click the **Rebuild** button on the top right
+
+![rebuild button](images/cci_rebuild.png)
+
+This run should produce a Green build!
+
+![first green build](images/cci_1st_success.png)
+
+### Docker Hub
+
+The Green build means that a new Docker image was created and pushed to the user's Docker Hub account. The newly created Docker image should be visible in the user's Docker hub tagged with the latest build number.
+
+![Docker Hub Build](images/docker_hub.png)
+
+## Continuos Delivery/Deployment
+
+Using the automation offered by CircleCI this project pushed the Docker image to the user's Docker Hub. The final requirement for this pipeline is to push a stable version of the application to Docker Hub which constitutes Continuous Deployment. If there would've been a manual action or user intervention required in this pipeline then it would be considered Continuos **Delivery** which is appropriate in situations where a review or an approval is required prior to actually deploying applications.
+
+## Summary
+
+In review this tutorial guides you in implementing a CI/CD pipeline into a codebase. Though this example is built using python technologies the general build, test and deployment concepts can easily be implemented in whatever language or framework you desire. The examples in this tutorial are simple but you can expand on them and tailor them to your pipelines. CircleCI has great [documentation](https://circleci.com/docs/2.0/) so don't hesitate to research the docs site and if you really get stuck you can also reach out to the CircleCI community via the [https://discuss.circleci.com/](https://discuss.circleci.com/) community/forum site.
 
 
