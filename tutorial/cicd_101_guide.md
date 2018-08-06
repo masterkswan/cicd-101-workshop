@@ -138,7 +138,7 @@ Once project's are setup in the CircleCI platform any commits pushed upstream to
 
 Before continuing ensure the [Prerequisites](#Prerequisites) section is completed. 
 
-# config.yml File
+### config.yml File
 
 The config.yml is where all of the CI/CD magic happens. Below is an example of the config.yml used in this tutorial with a brief explanation of the syntax:
 
