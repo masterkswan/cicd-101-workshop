@@ -1,4 +1,4 @@
-# Intro to CI/CD Workshop
+# Intro to CI/CD Tutorial
 
 This document will walk through implementing a simple CI/CD pipeline into a codebase using [CircleCI](https://circleci.com/).
 The following will be demonstrated:
@@ -140,7 +140,7 @@ Before continuing ensure the [Prerequisites](#Prerequisites) section is complete
 
 # config.yml File
 
-The config.yml is where all of the CI/CD magic happens. Below is an example of the config.yml used in this workshop with a brief explanation of the syntax:
+The config.yml is where all of the CI/CD magic happens. Below is an example of the config.yml used in this tutorial with a brief explanation of the syntax:
 
 ```
 version: 2
