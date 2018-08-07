@@ -24,7 +24,7 @@ Before you get started you'll need to have these things:
 
 This repo contains a simple python [Flask](http://flask.pocoo.org/) and you can find the complete [source code for this project here](https://github.com/ariv3ra/cicd-101-workshop) and you can `git clone` it locally. The app is a simple webserver that renders html when a request is made to it. The flask application lives in the `hello_world.py` file:
 
-```
+```python
 from flask import Flask
 
 app = Flask(__name__)
@@ -60,7 +60,7 @@ The key take away in this code the `message` variable within the `hello_world()`
 
 All code must be tested to ensure that quality stable code is being released to the public.  Python comes with a testing framework named [unittest](https://docs.python.org/2/library/unittest.html) which is used in this example.  The flask application has a companion unittest that will test the application and ensure it's functioning as designed. The file `test_hello_world.py` is the unittest for our hello_world.py app below is a quick explanation the code.
 
-```
+```python
 import hello_world
 import unittest
 
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     unittest.main()
 ```
 
-```
+```python
 import hello_world
 import unittest
 ```
@@ -93,7 +93,7 @@ Import the `hello_world` application using the `import` statement which gives th
 `class TestHelloWorld(unittest.TestCase):`
 The TestHelloWorld is instantiated from the base class `unittest.Test` which is the smallest unit of testing. It checks for a specific response to a particular set of inputs. unittest provides a base class, TestCase, which may be used to create new test cases.
 
-```
+```python
 def setUp(self):
         self.app = hello_world.app.test_client()
         self.app.testing = True
@@ -102,7 +102,7 @@ def setUp(self):
 `setUp()` is a class level method called to prepare the test fixture. This is called immediately before calling the test method. In this example we create define a variable named `app` and instantiate it as `app.test_client()` 
 object from the hello_world.py code.
 
-```
+```python
 def test_status_code(self):
     response = self.app.get('/')
     self.assertEqual(response.status_code, 200)
@@ -110,7 +110,7 @@ def test_status_code(self):
 
 `test_status_code()` is a method and it specifies an actual test case in code.  This test case makes a `get` request to the flask application and captures the app's response in the `response` variable. The `self.assertEqual(response.status_code, 200)` compares the value of the `response.status_code` result to the expected value of `200` which signifies the `get` request was successful. If the server responds with a status_code other that 200 the test will fail.
 
-```
+```python
 def test_message(self):
     response = self.app.get('/')
     message = hello_world.wrap_html('Welcome to CI/CD 101 using CircleCI')
@@ -119,7 +119,7 @@ def test_message(self):
 
 `test_message()` is another method that specifies a different test case.  This test case is designed to check the value of the `message` variable that is defined in the `hello_world()` method from the hello_world.py code. Like the previous test a **get** call is made to the app and the results are captured in a `response` variable. The following line :
 
-```
+```python
 message = hello_world.wrap_html('Welcome to CI/CD 101 using CircleCI')
 ```
 
@@ -142,7 +142,7 @@ Before continuing ensure the [Prerequisites](#Prerequisites) section is complete
 
 The config.yml is where all of the CI/CD magic happens. Below is an example of the config.yml used in this tutorial with a brief explanation of the syntax:
 
-```
+```yaml
 version: 2
 jobs:
   build:
@@ -200,7 +200,7 @@ The `- run:` keys specify commands to execute within the build.  Run keys have a
 
 **Important NOTE:** Each `run` block is equivalent to separate/individual shells or terminals so commands that are configured or executed will not persist in latter run blocks. Use the `$BASH_ENV` work around in the [Tips & Tricks section](https://circleci.com/docs/2.0/migration/#tips-for-setting-up-circleci-20)
 
-```
+```yaml
 - run:
     name: Setup VirtualEnv
     command: |
@@ -213,7 +213,7 @@ The `- run:` keys specify commands to execute within the build.  Run keys have a
 
 The `command:` key for this run block has a list of commands to execute. These commands set the `$TAG` & `IMAGE_NAME` custom environment variables that will be used throughout this build. The remaining commands set up the [python virtualenv](https://virtualenv.pypa.io/en/stable/) & installs the python dependencies specified in the `requirements.txt` file.
 
-```
+```yaml
 - run:
     name: Run Tests
     command: |
@@ -223,14 +223,14 @@ The `command:` key for this run block has a list of commands to execute. These c
 
 In this run block the command executes tests on our application and if these tests fail the entire build will fail and will require the developers to fix their code and recommit.
 
-```
+```yaml
 - setup_remote_docker:
     docker_layer_caching: true
 ```
 
 A requirement of this pipeline is to build a Docker image based on the app and pushing that image to Docker Hub. This run block specifies the [setup_remote_docker:](https://circleci.com/docs/2.0/glossary/#remote-docker) key which is a feature that enables building, running and pushing images to Docker registries from within a Docker executor job. When docker_layer_caching is set to true, CircleCI will try to reuse Docker Images (layers) built during a previous job or workflow. That is, every layer you built in a previous job will be accessible in the remote environment. However, in some cases your job may run in a clean environment, even if the configuration specifies `docker_layer_caching: true`.
 
-```
+```yaml
 - run:
     name: Build and push Docker image
     command: |
@@ -243,7 +243,7 @@ A requirement of this pipeline is to build a Docker image based on the app and p
 
 The **Build and push Docker image** run block specifies the commands that package the application into a single binary using pyinstaller then continues on to the Docker image building process.
 
-```
+```yaml
 docker build -t $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
 echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
 docker push $DOCKER_LOGIN/$IMAGE_NAME:$TAG
@@ -253,7 +253,7 @@ The `echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin` command 
 
 These commands build the docker image based on the `Dockerfile` included in the repo. [Dockerfile](https://docs.docker.com/engine/reference/builder/) is the instruction on how to build the Docker image.
 
-```
+```yaml
 FROM python:2.7.14
 
 RUN mkdir /opt/hello_world/
