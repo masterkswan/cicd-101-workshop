@@ -156,7 +156,7 @@ jobs:
           name: Setup VirtualEnv
           command: |
             echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
-            echo 'export IMAGE_NAME=python-circleci-docker' >> $BASH_ENV 
+            echo 'export IMAGE_NAME=cicd-101-workshop' >> $BASH_ENV 
             virtualenv helloworld
             . helloworld/bin/activate
             pip install --no-cache-dir -r requirements.txt
@@ -172,13 +172,9 @@ jobs:
           command: |
             . helloworld/bin/activate
             pyinstaller -F hello_world.py
-            docker build -t ariv3ra/$IMAGE_NAME:$TAG .
+            docker build -t $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push ariv3ra/$IMAGE_NAME:$TAG
-      - run:
-          name: Deploy app to Digital Ocean Server via Docker
-          command: |
-            ssh -o StrictHostKeyChecking=no root@hello.dpunks.org "/bin/bash ./deploy_app.sh ariv3ra/$IMAGE_NAME:$TAG"
+            docker push $DOCKER_LOGIN/$IMAGE_NAME:$TAG
 ```
 
 The `jobs:` key represents a list of jobs that will be run.  A job encapsulates the actions to be executed. If you only have one job to run then you must give it a key name `build:` you can get more details about [jobs and builds here](https://circleci.com/docs/2.0/configuration-reference/#jobs)
@@ -236,9 +232,9 @@ A requirement of this pipeline is to build a Docker image based on the app and p
     command: |
       . helloworld/bin/activate
       pyinstaller -F hello_world.py
-      docker build -t ariv3ra/$IMAGE_NAME:$TAG .
+      docker build -t $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
       echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-      docker push ariv3ra/$IMAGE_NAME:$TAG
+      docker push $DOCKER_LOGIN/$IMAGE_NAME:$TAG
 ```
 
 The **Build and push Docker image** run block specifies the commands that package the application into a single binary using pyinstaller then continues on to the Docker image building process.
