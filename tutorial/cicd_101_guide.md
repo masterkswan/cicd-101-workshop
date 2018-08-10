@@ -18,11 +18,11 @@ Before you get started you'll need to have these things:
 - [Docker Hub account](https://hub.docker.com)
 - Fork then clone the [cicd-101-workshop repo](https://github.com/ariv3ra/cicd-101-workshop) locally
 
- After you have all the pre-requisites complete you're ready to proceed to the next section.
+ After you have all the prerequisites complete you're ready to proceed to the next section.
 
 ## The App
 
-This repo contains a simple python [Flask](http://flask.pocoo.org/) and you can find the complete [source code for this project here](https://github.com/ariv3ra/cicd-101-workshop) and you can `git clone` it locally. The app is a simple webserver that renders html when a request is made to it. The flask application lives in the `hello_world.py` file:
+This repo contains a simple python [Flask](http://flask.pocoo.org/) and you can find the complete [source code for this project here](https://github.com/ariv3ra/cicd-101-workshop) and you can `git clone` it locally. The app is a simple web server that renders html when a request is made to it. The flask application lives in the `hello_world.py` file:
 
 ```python
 from flask import Flask
@@ -134,7 +134,7 @@ CircleCI integration is completed in basically two steps.
 1. Set up project access in CircleCI dashboard
 2. Define your CI/CD Builds a `config.yml` file
 
-Once project's are setup in the CircleCI platform any commits pushed upstream tot he codebase will be detected and CircleCI will execute the job defined in your `config.yml` file which is discussed in the next section.
+Once project's are setup in the CircleCI platform any commits pushed upstream to the codebase will be detected and CircleCI will execute the job defined in your `config.yml` file which is discussed in the next section.
 
 Before continuing ensure the [Prerequisites](#Prerequisites) section is completed. 
 
@@ -274,6 +274,9 @@ In order for the CircleCI platform to integrate with projects it must have acces
 - Login to the [dashboard](http://circleci.com/vcs-authorize/)
 - Click the **Add Project** icon on the left menu
 - Choose the appropriate GitHub org from the dropdown in the top left
+
+![Select Proper User or Organization](./images/cci_select_usr_org.png)
+
 - Find the `cicd-101-workshop` project in the list
 - Click the corresponding **Set Up Project** button on the right 
 
@@ -336,12 +339,10 @@ The Green build means that a new Docker image was created and pushed to the user
 
 ![Docker Hub Build](images/docker_hub.png)
 
-## Continuos Delivery/Deployment
+## Continuous Delivery/Deployment
 
-Using the automation offered by CircleCI this project pushed the Docker image to the user's Docker Hub. The final requirement for this pipeline is to push a stable version of the application to Docker Hub which constitutes Continuous Deployment. If there would've been a manual action or user intervention required in this pipeline then it would be considered Continuos **Delivery** which is appropriate in situations where a review or an approval is required prior to actually deploying applications.
+Using the automation offered by CircleCI this project pushed the Docker image to the user's Docker Hub. The final requirement for this pipeline is to push a stable version of the application to Docker Hub which constitutes Continuous Deployment. If there would've been a manual action or user intervention required in this pipeline then it would be considered Continuous **Delivery** which is appropriate in situations where a review or an approval is required prior to actually deploying applications.
 
 ## Summary
 
 In review this tutorial guides you in implementing a CI/CD pipeline into a codebase. Though this example is built using python technologies the general build, test and deployment concepts can easily be implemented in whatever language or framework you desire. The examples in this tutorial are simple but you can expand on them and tailor them to your pipelines. CircleCI has great [documentation](https://circleci.com/docs/2.0/) so don't hesitate to research the docs site and if you really get stuck you can also reach out to the CircleCI community via the [https://discuss.circleci.com/](https://discuss.circleci.com/) community/forum site.
-
-
