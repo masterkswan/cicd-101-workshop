@@ -6,12 +6,10 @@ def wrap_html(message):
     html = """
         <html>
         <body>
-            <div style='font-size:80px;'>
-            <center>
+            <div style='text-align:center;font-size:80px;'>
                 <image height="340" width="1200" src="https://user-images.githubusercontent.com/194400/41597205-a57442ea-73c4-11e8-9591-61f5c83c7e66.png">
                 <br>
                 {0}<br>
-            </center>
             </div>
         </body>
         </html>""".format(message)

@@ -33,12 +33,10 @@ def wrap_html(message):
     html = """
         <html>
         <body>
-            <div style='font-size:80px;'>
-            <center>
+            <div style='text-align:center;font-size:80px;'>
                 <image height="340" width="1200" src="https://user-images.githubusercontent.com/194400/41597205-a57442ea-73c4-11e8-9591-61f5c83c7e66.png">
                 <br>
                 {0}<br>
-            </center>
             </div>
         </body>
         </html>""".format(message)
@@ -138,9 +136,9 @@ Once project's are setup in the CircleCI platform any commits pushed upstream to
 
 Before continuing ensure the [Prerequisites](#Prerequisites) section is completed. 
 
-### config.yml File
+### .circleci/config.yml
 
-The config.yml is where all of the CI/CD magic happens. Below is an example of the config.yml used in this tutorial with a brief explanation of the syntax:
+The config.yml is where all of the CI/CD magic happens. The config.yml **must** reside in a subdirectory named `.circleci/`. Below is an example of the config.yml used in this tutorial with a brief explanation of the syntax:
 
 ```yaml
 version: 2
@@ -207,7 +205,7 @@ The `- run:` keys specify commands to execute within the build.  Run keys have a
       pip install --no-cache-dir -r requirements.txt
 ```
 
-The `command:` key for this run block has a list of commands to execute. These commands set the `$TAG` & `IMAGE_NAME` custom environment variables that will be used throughout this build. The remaining commands set up the [python virtualenv](https://virtualenv.pypa.io/en/stable/) & installs the python dependencies specified in the `requirements.txt` file.
+The `command:` key for this run block has a list of commands to execute. These commands set the `$TAG` & `IMAGE_NAME` custom environment variables that will be used throughout this build. The remaining commands set up the [python virtualenv](https://virtualenv.pypa.io/en/stable/) & installs the Python dependencies specified in the `requirements.txt` file.
 
 ```yaml
 - run:
@@ -269,7 +267,7 @@ The application, unit tests and config.yml have been explained in detail and pro
 
 ### Add Project to CircleCI
 
-In order for the CircleCI platform to integrate with projects it must have access to your codebase. In this section demonstrate how to give CircleCI access to a project on Github via the CircleCi dashboard.
+In order for the CircleCI platform to integrate with projects it must have access to the codebase. This section demonstrates how to give CircleCI access to a project on Github via the CircleCi dashboard.
 
 - Login to the [dashboard](http://circleci.com/vcs-authorize/)
 - Click the **Add Project** icon on the left menu
